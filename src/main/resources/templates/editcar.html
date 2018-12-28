@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Edit car</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/cars_style.css}">
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <script th:src="@{/js/add_car_script.js}"></script>
+</head>
+<body>
+
+<h1 th:text="'Edit car ' + ${user}"></h1>
+
+<table id="user_car_table" class="table table-bordered">
+    <tbody th:each="car : ${cars}">
+        <tr><td><img src="#" th:src="@{/image/{path}(path = ${car.picturePath})}"></td>
+            <td>Brand: <input type="text" th:value="${car.model.brand.name}" disabled/>
+                <br>Model: <input type="text" th:value="${car.model.name}" disabled/>
+                <br>Color: <input type="text" th:value="${car.color}" disabled/>
+                <br>Body type: <input type="text" th:value="${car.bodyType.name}" disabled/>
+                <br>Year of issue: <input type="text" th:value="${car.year}" disabled/>
+                <br>Seller: <input type="text" th:value="${car.seller.name}" disabled/>
+                <br>
+                <form action="/editcar" th:action="@{/editcar}" method="post">
+                    <input type="hidden" name="carId" th:value="${car.id}">
+                    <br>
+                    <th:block th:switch="${car.status}">
+                        <input th:case="true" type="submit" value="Sold">
+                        <input th:case="false" type="submit" value="Not sold">
+                    </th:block>
+                </form>
+            </td>
+        </tr>
+    </c:forEach>
+    </tbody>
+</table>
+<br>
+<a href="/cars" th:href="@{/cars}" th:text="Back">Back</a>
+
+</body>
+</html>

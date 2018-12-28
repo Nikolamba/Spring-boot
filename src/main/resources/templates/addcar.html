@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Creating a new advertisement</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/cars_style.css}">
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <script src="add_car_script.js" th:src="@{/js/add_car_script.js}"></script>
+</head>
+<body>
+<h1>Creating a new advertisement</h1>
+
+<div th:if="${error}" th:text="${error}" style="background-color: red"></div>
+
+<form action="/addcar" th:action="@{/addcar}" method="post" th:object="${car}"  enctype="multipart/form-data" name="form">
+    <fieldset>
+        <table id="add_car_table" class="table table-bordered">
+            <tr>
+                <th>Brand</th>
+                <td>
+                    <select id="brands" name="brands" title="Select car's brand">
+                        <option disabled>Select brand</option>
+                        <option th:each="brand : ${brands}" th:value="${brand.id}" th:text="${brand.name}"></option>
+                    </select>
+                </td>
+            </tr>
+
+            <tr>
+                <th>Model</th>
+                <td>
+                    <select th:field="*{model}" title="Select car's model" disabled id="models">
+                        <!--<option value="Select model" disabled>Select model</option>-->
+                    </select>
+                </td>
+                <td th:if="${error}" th:errors="*{model}">Model error</td>
+            </tr>
+            <tr>
+                <th>Body type</th>
+                <td>
+                    <select th:field="*{bodyType}" title="Select car's body type" id="body_type">
+                        <!--<option value="Select body type" disabled>Select Body Type</option>-->
+                        <option th:each="type : ${types}" th:value="${type.id}" th:text="${type.name}"></option>
+                    </select>
+                </td>
+                <td th:if="${#fields.hasErrors('bodyType')}" th:errors="*{bodyType}">Body type error</td>
+            </tr>
+            <tr>
+                <th>Color</th>
+                <td>
+                    <input th:field="*{color}" id="color" title="Enter car's color"/>
+                </td>
+                <td th:if="${#fields.hasErrors('color')}" th:errors="*{color}">Color error</td>
+            </tr>
+
+            <tr>
+                <th>Year of issue</th>
+                <td>
+                    <input th:field="*{year}" id="year" title="Enter car's year of issue"/>
+                </td>
+                <td th:if="${#fields.hasErrors('year')}" th:errors="*{year}">Age Error</td>
+            </tr>
+
+        </table>
+
+    </fieldset>
+
+    Select picture to upload:
+    <input type="file" name="image" />
+    <br/><br/>
+
+    <input id="input_button" type="submit" value="Add new car" disabled>
+</form>
+
+</body>
+</html>
