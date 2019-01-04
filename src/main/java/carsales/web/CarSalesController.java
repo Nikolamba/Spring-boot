@@ -37,8 +37,6 @@ public class CarSalesController {
         this.logic = logic;
     }
 
-
-
     @GetMapping ("/cars")
     public String showCarsView() {
         return "cars";
