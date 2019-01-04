@@ -1,1 +1,1 @@
-java $JAVA_OPTS -jar target/spring_boot-1.0-SNAPSHOT.jar --server.port=$PORT $JAR_OPTS
+web: java -jar target/spring_boot-1.0-SNAPSHOT.jar
