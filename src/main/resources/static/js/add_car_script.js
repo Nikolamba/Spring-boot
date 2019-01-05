@@ -4,7 +4,7 @@ $(document).ready(function () {
         var brand = $('#brands').val();
         $.ajax({
             type: 'get',
-            url: 'http://localhost:8080/carsales/getmodels',
+            url: window.location.protocol + '//' + window.location.host + '/carsales/getmodels',
             data: 'brandId=' + brand,
             dataType: 'json',
             error: [function (xhr, status, error) {

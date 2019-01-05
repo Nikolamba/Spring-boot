@@ -5,7 +5,7 @@ function registration() {
     var data = 'name=' + name + '&pass=' + pass;
     $.ajax({
         type: 'post',
-        url: 'http://localhost:8080/carsales/resource/registration',
+        url: window.location.protocol + '//' + window.location.host + '/carsales/resource/registration',
         data: data,
         dataType: 'text',
         error: [function(xhr, status, error) {
@@ -18,7 +18,7 @@ function registration() {
 }
 
 function fillTable(response) {
-    var picturePath = 'http://localhost:8080/carsales/image/';
+    var picturePath = window.location.protocol + '//' + window.location.host + '/carsales/image/';
     $.each(response, function () {
         var year = 0, month = 0, day = 0;
         if (this.data !== null) {
@@ -43,7 +43,7 @@ function fillTable(response) {
 function getAllCars() {
     $.ajax({
         type: 'get',
-        url: 'http://localhost:8080/carsales/resource/allcars',
+        url: window.location.protocol + '//' + window.location.host + '/carsales/resource/allcars',
         dataType: 'json',
         error: [function(xhr, status, error) {
             alert(xhr.responseText + '|\n' + status + '|\n' + error);
@@ -61,7 +61,7 @@ function filterRequest() {
     $('#cars_table').empty();
     $.ajax({
         type: 'get',
-        url: 'http://localhost:8080/carsales/resource/filters',
+        url: window.location.protocol + '//' + window.location.host + '/carsales/resource/filters',
         data: 'brandId=' + brandId + '&onlyFoto=' + onlyFoto + '&currentData=' + currentData,
         dataType: 'json',
         error: [function(xhr, status, error) {
@@ -93,7 +93,7 @@ $(document).ready(function () {
     //выполняет запрос для заполнения марок машин в фильтре
     $.ajax({
         type: 'get',
-        url: 'http://localhost:8080/carsales/resource/allbrand',
+        url: window.location.protocol + '//' + window.location.host + '/carsales/resource/allbrand',
         dataType: 'json',
         error: [function(xhr, status, error) {
             alert(xhr.responseText + '|\n' + status + '|\n' + error);
