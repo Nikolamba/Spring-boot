@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <changeSet id="1547657109973-2" author="Kalampus (generated)">
+        <insert tableName="users">
+            <column name="id" valueNumeric="1" />
+            <column name="name" value="Nikolay" />
+            <column name="pass" value="123" />
+        </insert>
+        <insert tableName="users">
+            <column name="id" valueNumeric="2" />
+            <column name="name" value="Masha" />
+            <column name="pass" value="321" />
+        </insert>
+
+        <insert tableName="body_type">
+            <column name="id" valueNumeric="1" />
+            <column name="name" value="BodyType_1" />
+        </insert>
+        <insert tableName="body_type">
+            <column name="id" valueNumeric="2" />
+            <column name="name" value="BodyType_2" />
+        </insert>
+
+        <insert tableName="brand">
+            <column name="id" valueNumeric="1" />
+            <column name="name" value="brand_1" />
+        </insert>
+        <insert tableName="brand">
+            <column name="id" valueNumeric="2" />
+            <column name="name" value="brand_2" />
+        </insert>
+
+        <insert tableName="model">
+            <column name="id" valueNumeric="1" />
+            <column name="name" value="model_1" />
+            <column name="brand_id" valueNumeric="1" />
+        </insert>
+        <insert tableName="model">
+            <column name="id" valueNumeric="2" />
+            <column name="name" value="model_2" />
+            <column name="brand_id" valueNumeric="2" />
+        </insert>
+
+        <insert tableName="car">
+            <column name="id" valueNumeric="1" />
+            <column name="year" valueNumeric="2010" />
+            <column name="color" value="color_1" />
+            <column name="model_id" valueNumeric="1" />
+            <column name="body_type" valueNumeric="1" />
+            <column name="seller" valueNumeric="1" />
+            <column name="status" valueBoolean="false" />
+            <column name="picture_path" value="" />
+            <column name="data" valueDate="2018-12-25 10:43:45.524000" />
+        </insert>
+        <insert tableName="car">
+            <column name="id" valueNumeric="2" />
+            <column name="year" valueNumeric="2011" />
+            <column name="color" value="color_2" />
+            <column name="model_id" valueNumeric="2" />
+            <column name="body_type" valueNumeric="2" />
+            <column name="seller" valueNumeric="2" />
+            <column name="status" valueBoolean="false" />
+            <column name="picture_path" value="" />
+            <column name="data" valueDate="2018-12-25 10:43:45.524000" />
+        </insert>
+    </changeSet>
+</databaseChangeLog>

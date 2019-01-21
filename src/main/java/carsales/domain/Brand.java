@@ -34,7 +34,7 @@ public class Brand {
     }
 
     public String getName() {
-        return name;
+        return name.trim();
     }
 
     public void setId(int id) {

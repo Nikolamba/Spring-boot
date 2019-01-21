@@ -39,7 +39,7 @@ public class Model {
     }
 
     public String getName() {
-        return name;
+        return name.trim();
     }
 
     public Brand getBrand() {

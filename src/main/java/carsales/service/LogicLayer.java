@@ -67,6 +67,8 @@ public class LogicLayer {
         return daoCar.findAll();
     }
 
+    public Iterable<User> findAllUsers() {return daoUser.findAll();}
+
     public List<Model> findModelsByBrand(Brand brand) {
         return daoModel.findByBrand(brand);
     }

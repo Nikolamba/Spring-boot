@@ -7,11 +7,16 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.liquibase.LiquibaseDataSource;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.servlet.ModelAndView;
@@ -19,6 +24,8 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.sql.DataSource;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
@@ -34,27 +41,15 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(CarSalesController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
+@ActiveProfiles("test")
 public class CarSalesControllerTest {
     @Autowired
     private MockMvc mvc;
 
-    @MockBean
+    @Autowired
     private LogicLayer logic;
-
-    @MockBean
-    DataSource dataSource;
-
-    private User user_1 = new User("Nikolay", "123");
-    private User user_2 = new User("Masha", "321");
-    private BodyType bodyType_1 = new BodyType("BodyType_1");
-    private BodyType bodyType_2 = new BodyType("BodyType_2");
-    private Brand brand_1 = new Brand("brand_1");
-    private Brand brand_2 = new Brand("brand_2");
-    private Model model_1 = new Model("model_1", brand_1);
-    private Model model_2 = new Model("model_2", brand_2);
-    private Car car_1 = new Car(2010, "color_1", model_1, bodyType_1, user_1);
-    private Car car_2 = new Car(2011, "color_2", model_2, bodyType_2, user_2);
 
     @Test
     public void testingShowAllCarsPage() throws Exception {
@@ -66,33 +61,30 @@ public class CarSalesControllerTest {
 
     @Test
     public void testingShowAllCars() throws Exception {
-        given(this.logic.findAllCars()).willReturn(new ArrayList<Car>(Lists.newArrayList(car_1, car_2)));
+        int size = convertToList(this.logic.findAllCars().iterator()).size();
         this.mvc.perform(get("/resource/allcars").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].color", is(car_1.getColor())))
-                .andExpect(jsonPath("$[1].year", is(car_2.getYear())));
+                .andExpect(jsonPath("$", hasSize(size)))
+                .andExpect(jsonPath("$[0].color", is("color_1")))
+                .andExpect(jsonPath("$[1].year", is(2011)));
     }
 
     @Test
     public void testingAllBrand() throws Exception {
-        given(this.logic.findAllBrands()).willReturn(new ArrayList<>(Lists.newArrayList(brand_1, brand_2)));
         this.mvc.perform(get("/resource/allbrand").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].name", is(brand_1.getName())))
-                .andExpect(jsonPath("$[1].name", is(brand_2.getName())));
+                .andExpect(jsonPath("$[0].name", is("brand_1")))
+                .andExpect(jsonPath("$[1].name", is("brand_2")));
     }
 
     @Test
     @WithMockUser(username = "Nikolay", password = "123", roles = {"USER"})
     public void testingGetModelsByBrandWithAutorization() throws Exception {
-        brand_1.setId(1);
-        given(this.logic.findModelsByBrand(any(Brand.class))).willReturn(new ArrayList<>(Lists.newArrayList(model_1)));
         this.mvc.perform(get("/getmodels?brandId=1").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].name", is(model_1.getName())));
+                .andExpect(jsonPath("$[0].name", is("model_1")));
     }
 
     @Test
@@ -112,68 +104,62 @@ public class CarSalesControllerTest {
 
     @Test
     public void testingShowRegistrationPagePost() throws Exception {
-        given(this.logic.registrationUser("user_1", "pass")).willReturn(true);
         this.mvc.perform(post("/registration")
                 .param("name", "user_1")
                 .param("pass", "pass"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("message"))
                 .andExpect(model().attributeDoesNotExist("error"));
-        verify(this.logic, times(1)).registrationUser("user_1", "pass");
+        List<User> users = this.convertToList(this.logic.findAllUsers().iterator());
+        assertEquals(3, users.size());
     }
 
     @Test
     @WithMockUser(username = "user", password = "123", roles = {"USER"})
     public void testingShowAddCarPageGet() throws Exception {
-        given(this.logic.findAllBrands()).willReturn(new ArrayList<>(Lists.newArrayList(brand_1)));
-        given(this.logic.findAllBodyType()).willReturn(new ArrayList<>(Lists.newArrayList(bodyType_1)));
         this.mvc.perform(get("/addcar"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("brands", "types", "car"))
-                .andExpect(view().name("addcar"));
-        verify(this.logic, times(1)).findAllBrands();
-        verify(this.logic, times(1)).findAllBodyType();
+                .andExpect(view().name("addcar"))
+                .andExpect(model().attribute("brands", this.logic.findAllBrands()))
+                .andExpect(model().attribute("types", this.logic.findAllBodyType()));
     }
 
     @Test
-    @WithMockUser(username = "user", password = "123", roles = {"USER"})
+    @WithMockUser(username = "Nikolay", password = "123", roles = {"USER"})
     public void testingShowAddCarPagePost() throws Exception {
-        given(logic.findUserByName(anyString())).willReturn(user_1);
         MockMultipartFile image = new MockMultipartFile("image", "".getBytes());
+        Car car = this.logic.findAllCars().iterator().next();
+        car.setId(3);
         this.mvc.perform(fileUpload("/addcar").file(image)
-                .flashAttr("car", car_1)
+                .flashAttr("car", car)
                 .accept(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(model().attributeExists("message"))
+                .andExpect(view().name("cars"))
                 .andExpect(status().isOk());
-        verify(this.logic, times(1)).addCar(any(Car.class));
-        verify(this.logic, times(1)).findUserByName(anyString());
-        verifyNoMoreInteractions(this.logic);
+        assertEquals(3, convertToList(this.logic.findAllCars().iterator()).size());
     }
 
     @Test
-    @WithMockUser(username = "user", password = "123", roles = {"USER"})
+    @WithMockUser(username = "Nikolay", password = "123", roles = {"USER"})
     public void testingShowEditPageGet() throws Exception {
-        given(logic.findUserByName(anyString())).willReturn(user_1);
-        given(logic.findCarsByUser(any(User.class))).willReturn(new ArrayList<>(Lists.newArrayList(car_1)));
+        User currentUser = this.logic.findAllUsers().iterator().next();
         this.mvc.perform(get("/editcar"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("text/html;charset=UTF-8"))
                 .andExpect(model().attributeExists("cars", "user"))
+                .andExpect(model().attribute("cars", this.logic.findCarsByUser(currentUser)))
                 .andExpect(view().name("editcar"));
-        verify(this.logic, times(1)).findUserByName(anyString());
-        verify(this.logic, times(1)).findCarsByUser(any(User.class));
-        verifyNoMoreInteractions(this.logic);
     }
 
     @Test
     @WithMockUser(username = "user", password = "123", roles = {"USER"})
     public void testingShowEditCarPagePost() throws Exception {
-        given(logic.findById(anyInt())).willReturn(car_1);
         this.mvc.perform(post("/editcar").param("carId", "1"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("editcar"));
-        verify(logic, times(1)).findById(anyInt());
-        verify(logic, times(1)).editCar(any(Car.class));
+        assertTrue(this.logic.findById(1).isStatus());
+        this.logic.findById(1).setStatus(false);
     }
 
     @Test
@@ -186,15 +172,19 @@ public class CarSalesControllerTest {
 
     @Test
     public void testingGetAllCarsByFilters() throws Exception {
-        given(logic.findAllCars()).willReturn(new ArrayList<>(Lists.newArrayList(car_1)));
         this.mvc.perform(get("/resource/filters")
                 .param("brandId", "-1")
                 .param("onlyFoto", "false")
                 .param("currentData", "false"))
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$[0].color", is("color_1")))
+                .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(status().isOk());
-        verify(this.logic, times(1)).findAllCars();
+    }
 
+    private <T> List<T> convertToList(Iterator<T> iterator) {
+        List<T> source = new ArrayList<>();
+        iterator.forEachRemaining(source::add);
+        return source;
     }
 }

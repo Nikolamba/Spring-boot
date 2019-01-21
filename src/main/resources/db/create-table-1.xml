@@ -1,0 +1,79 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet author="Kalampus (generated)" id="1547657109973-1">
+        <createTable tableName="body_type">
+            <column autoIncrement="true" name="id" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="body_type_pkey"/>
+            </column>
+            <column name="name" type="CHAR(50)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Kalampus (generated)" id="1547657109973-2">
+        <createTable tableName="brand">
+            <column autoIncrement="true" name="id" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="brand_pkey"/>
+            </column>
+            <column name="name" type="CHAR(50)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Kalampus (generated)" id="1547657109973-3">
+        <createTable tableName="car">
+            <column autoIncrement="true" name="id" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="car_pkey"/>
+            </column>
+            <column name="year" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="color" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="picture_path" type="CHAR(200)"/>
+            <column name="model_id" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="body_type" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="seller" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="data" type="TIMESTAMP WITHOUT TIME ZONE"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Kalampus (generated)" id="1547657109973-4">
+        <createTable tableName="model">
+            <column autoIncrement="true" name="id" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="car_model_pkey"/>
+            </column>
+            <column name="name" type="CHAR(50)"/>
+            <column name="brand_id" type="INTEGER"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Kalampus (generated)" id="1547657109973-5">
+        <createTable tableName="users">
+            <column autoIncrement="true" name="id" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="users_pkey"/>
+            </column>
+            <column name="name" type="CHAR(50)"/>
+            <column name="pass" type="VARCHAR(100)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="Kalampus (generated)" id="1547657109973-6">
+        <addUniqueConstraint columnNames="name" constraintName="con" tableName="users"/>
+    </changeSet>
+    <changeSet author="Kalampus (generated)" id="1547657109973-7">
+        <addForeignKeyConstraint baseColumnNames="body_type" baseTableName="car" constraintName="car_body_type_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="body_type" validate="true"/>
+    </changeSet>
+    <changeSet author="Kalampus (generated)" id="1547657109973-8">
+        <addForeignKeyConstraint baseColumnNames="model_id" baseTableName="car" constraintName="car_car_model_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="model" validate="true"/>
+    </changeSet>
+    <changeSet author="Kalampus (generated)" id="1547657109973-9">
+        <addForeignKeyConstraint baseColumnNames="brand_id" baseTableName="model" constraintName="car_model_brand_id_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="brand" validate="true"/>
+    </changeSet>
+    <changeSet author="Kalampus (generated)" id="1547657109973-10">
+        <addForeignKeyConstraint baseColumnNames="seller" baseTableName="car" constraintName="car_seller_fkey" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="users" validate="true"/>
+    </changeSet>
+</databaseChangeLog>
