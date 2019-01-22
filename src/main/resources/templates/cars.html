@@ -17,31 +17,50 @@
     <script th:src="@{/js/downloadData.js}"></script>
 </head>
 <body>
-    <h1>Car sales area</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12" id="header" th:fragment="header">
+            <header>
+                <div class="title">Car sales area</div>
+            </header>
 
-    <div th:if="${error}" th:text="${error}" style="background-color: red"></div>
-    <div th:if="${message}" th:text="${message}" style="background-color: orange"></div>
+            <div th:if="${error}" th:text="${error}" style="background-color: red"></div>
+            <div th:if="${message}" th:text="${message}" style="background-color: orange"></div>
+        </div>
 
-    <div class="btn-group">
-        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true">
-            Actions <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu">
-            <li><a th:href="@{/addcar}">Add car</a></li>
-            <li><a th:href="@{/editcar}">Edit</a></li>
-            <li><a th:href="@{/signin}">Signin</a></li>
-            <li><a th:href="@{/registration}">Registration</a></li>
-        </ul>
+        <div class="col-md-12">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <a class="navbar-brand" href="#">Navbar</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                    <div class="navbar-nav">
+                        <a class="nav-item nav-link active" th:href="@{/cars}">Home <span class="sr-only">(current)</span></a>
+                        <a class="nav-item nav-link" th:href="@{/addcar}">Add car</a>
+                        <a class="nav-item nav-link" th:href="@{/editcar}">Edit car</a>
+                        <a class="nav-item nav-link" th:href="@{/login}">Signin</a>
+                        <a class="nav-item nav-link" th:href="@{/registration}">Registration</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+
+        <div class="col-md-3">
+            <br><br>
+            filter by brand name:<select id="brandFilter" name="brandFilter">
+            <option value="-1" selected>All</option>
+        </select><br><br>
+            With photo only: <input type="checkbox" id="onlyFoto"><br><br>
+            For the current date: <input type="checkbox" id="currentData">
+        </div>
+
+        <div class="col-md-9">
+            <table id="cars_table" class="table table-striped">
+            </table>
+        </div>
     </div>
-    <br><br>
+</div>
 
-    filter by brand name:<select id="brandFilter" name="brandFilter">
-        <option value="-1" selected>All</option>
-    </select><br>
-    With photo only: <input type="checkbox" id="onlyFoto"><br>
-    For the current date: <input type="checkbox" id="currentData">
-
-    <table id="cars_table" class="table table-bordered">
-    </table>
 </body>
 </html>

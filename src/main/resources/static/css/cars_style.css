@@ -1,34 +1,74 @@
 body {
-    background-color: gainsboro;
+    background-image: url(wall.png);
     margin-left: 200px;
     margin-right: 200px;
+    background-repeat: repeat;
 }
 
-#btn-group {
-    !important;
-    width: 100px;
-    !important;
-    margin: 0 auto;
+.col-md-3 {
+    background-color: rgba(214, 216, 217, 1);
+}
+
+.col-md-9, .col-md-6 {
+    background-color: whitesmoke;
+}
+
+#signin_form {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+#header {
+    margin: 0;
+    padding-top: 30px;
+    padding-bottom: 10px;
+}
+
+#adding-form {
+    background-color: darkgray;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.col-md-12 {
+    padding-bottom: 10px;
+}
+
+#edit-car-form {
+    background-color: darkgray;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+header {
+    width: 100%;
+    background: whitesmoke url("logo.png") no-repeat;
+    background-size: cover;
+    height: 320px;
+}
+.title {
+    font-size: 70px;
+    padding-top: 35px;
+    padding-right: 20px;
+    text-align: right;
 }
 
 #cars_table {
-    !important;
     background-color: whitesmoke;
-    table-layout:fixed; width:450px;
+    table-layout:fixed;
+    width:100%;
 }
 
 #cars_table td {
     overflow:hidden;
 }
-#cars_table td:nth-of-type(1) {
-    width:450px;
-}
-#cars_table td:nth-of-type(2) {
-    width:450px;
-}
+
 
 #add_car_table {
-    !important;
+    background-color: whitesmoke;
+}
+
+#user_car_table {
     background-color: whitesmoke;
 }
 
@@ -37,6 +77,6 @@ body {
 }
 
 img {
-    width: 450px;
-    height: 450px;
+    width: 250px;
+    height: 250px;
 }

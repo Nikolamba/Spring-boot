@@ -13,71 +13,100 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
-    <script src="add_car_script.js" th:src="@{/js/add_car_script.js}"></script>
+    <script th:src="@{/js/add_car_script.js}"></script>
 </head>
 <body>
-<h1>Creating a new advertisement</h1>
 
-<div th:if="${error}" th:text="${error}" style="background-color: red"></div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12" id="header" th:fragment="header">
+            <header>
+                <div class="title">Car sales area</div>
+            </header>
+            <div th:if="${error}" th:text="${error}" style="background-color: red"></div>
+        </div>
 
-<form action="/addcar" th:action="@{/addcar}" method="post" th:object="${car}"  enctype="multipart/form-data" name="form">
-    <fieldset>
-        <table id="add_car_table" class="table table-bordered">
-            <tr>
-                <th>Brand</th>
-                <td>
-                    <select id="brands" name="brands" title="Select car's brand">
-                        <option disabled>Select brand</option>
-                        <option th:each="brand : ${brands}" th:value="${brand.id}" th:text="${brand.name}"></option>
-                    </select>
-                </td>
-            </tr>
+        <div class="col-md-12">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <a class="navbar-brand" href="#">Navbar</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                    <div class="navbar-nav">
+                        <a class="nav-item nav-link active" th:href="@{/cars}">Home <span class="sr-only">(current)</span></a>
+                        <a class="nav-item nav-link" th:href="@{/addcar}">Add car</a>
+                        <a class="nav-item nav-link" th:href="@{/editcar}">Edit car</a>
+                        <a class="nav-item nav-link" th:href="@{/login}">Signin</a>
+                        <a class="nav-item nav-link" th:href="@{/registration}">Registration</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
 
-            <tr>
-                <th>Model</th>
-                <td>
-                    <select th:field="*{model}" title="Select car's model" disabled id="models">
-                        <!--<option value="Select model" disabled>Select model</option>-->
-                    </select>
-                </td>
-                <td th:if="${error}" th:errors="*{model}">Model error</td>
-            </tr>
-            <tr>
-                <th>Body type</th>
-                <td>
-                    <select th:field="*{bodyType}" title="Select car's body type" id="body_type">
-                        <!--<option value="Select body type" disabled>Select Body Type</option>-->
-                        <option th:each="type : ${types}" th:value="${type.id}" th:text="${type.name}"></option>
-                    </select>
-                </td>
-                <td th:if="${#fields.hasErrors('bodyType')}" th:errors="*{bodyType}">Body type error</td>
-            </tr>
-            <tr>
-                <th>Color</th>
-                <td>
-                    <input th:field="*{color}" id="color" title="Enter car's color"/>
-                </td>
-                <td th:if="${#fields.hasErrors('color')}" th:errors="*{color}">Color error</td>
-            </tr>
+        <div class="col-md-12" id="adding-form">
+            <h2>Creating a new advertisement</h2>
+            <form th:action="@{/addcar}" method="post" th:object="${car}"  enctype="multipart/form-data" name="form">
+                <fieldset>
+                    <table id="add_car_table" class="table table-bordered">
+                        <tr>
+                            <th>Brand</th>
+                            <td>
+                                <select id="brands" name="brands" title="Select car's brand">
+                                    <option disabled>Select brand</option>
+                                    <option th:each="brand : ${brands}" th:value="${brand.id}" th:text="${brand.name}"></option>
+                                </select>
+                            </td>
+                        </tr>
 
-            <tr>
-                <th>Year of issue</th>
-                <td>
-                    <input th:field="*{year}" id="year" title="Enter car's year of issue"/>
-                </td>
-                <td th:if="${#fields.hasErrors('year')}" th:errors="*{year}">Age Error</td>
-            </tr>
+                        <tr>
+                            <th>Model</th>
+                            <td>
+                                <select th:field="*{model}" title="Select car's model" disabled id="models">
+                                    <!--<option value="Select model" disabled>Select model</option>-->
+                                </select>
+                            </td>
+                            <td th:if="${error}" th:errors="*{model}">Model error</td>
+                        </tr>
+                        <tr>
+                            <th>Body type</th>
+                            <td>
+                                <select th:field="*{bodyType}" title="Select car's body type" id="body_type">
+                                    <!--<option value="Select body type" disabled>Select Body Type</option>-->
+                                    <option th:each="type : ${types}" th:value="${type.id}" th:text="${type.name}"></option>
+                                </select>
+                            </td>
+                            <td th:if="${#fields.hasErrors('bodyType')}" th:errors="*{bodyType}">Body type error</td>
+                        </tr>
+                        <tr>
+                            <th>Color</th>
+                            <td>
+                                <input th:field="*{color}" id="color" title="Enter car's color"/>
+                            </td>
+                            <td th:if="${#fields.hasErrors('color')}" th:errors="*{color}">Color error</td>
+                        </tr>
 
-        </table>
+                        <tr>
+                            <th>Year of issue</th>
+                            <td>
+                                <input th:field="*{year}" id="year" title="Enter car's year of issue"/>
+                            </td>
+                            <td th:if="${#fields.hasErrors('year')}" th:errors="*{year}">Age Error</td>
+                        </tr>
 
-    </fieldset>
+                    </table>
 
-    Select picture to upload:
-    <input type="file" name="image" />
-    <br/><br/>
+                </fieldset>
 
-    <input id="input_button" type="submit" value="Add new car" disabled>
-</form>
+                Select picture to upload:
+                <input type="file" name="image" />
+                <br/><br/>
+
+                <input class="btn-primary" id="input_button" type="submit" value="Add new car" disabled>
+            </form>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>

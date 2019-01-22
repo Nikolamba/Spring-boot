@@ -5,28 +5,65 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Registration</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/cars_style.css}">
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
-    <link rel="stylesheet" th:href="@{/css/cars_style.css}">
+    <title>Registration</title>
+
 </head>
 <body>
-<h1>Registration</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12" id="header" th:fragment="header">
+            <header>
+                <div class="title">Car sales area</div>
+            </header>
+            <div th:if="${error}" th:text="${error}" style="background-color: red"></div>
+            <div th:if="${message}" th:text="${message}" style="background-color: orange"></div>
+        </div>
 
-<div th:if="${message}" th:text="${message}" style="background-color: orange"></div>
-<div th:if="${error}" th:text="${error}" style="background-color: red"></div>
+        <div class="col-md-12">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <a class="navbar-brand" href="#">Navbar</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                    <div class="navbar-nav">
+                        <a class="nav-item nav-link active" th:href="@{/cars}">Home <span class="sr-only">(current)</span></a>
+                        <a class="nav-item nav-link" th:href="@{/addcar}">Add car</a>
+                        <a class="nav-item nav-link" th:href="@{/editcar}">Edit car</a>
+                        <a class="nav-item nav-link" th:href="@{/login}">Signin</a>
+                        <a class="nav-item nav-link" th:href="@{/registration}">Registration</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
 
-<form th:action="@{/registration}" method="post">
-    <div><label> User Name : <input type="text" name="name"/> </label></div>
-    <div><label> Password: <input type="password" name="pass"/> </label></div>
-    <br>
-    <div><input type="submit" value="Registration"/></div>
-</form>
-    <br>
-<input type="button"    th:src="@{/signin}" th:value="Signin">
+        <div class="col-md-6" id="signin_form">
+            <h2>Registration form</h2>
+            <form th:action="@{/registration}" method="post">
+                <div class="form-group">
+                    <label for="user-name">User name</label>
+                    <input type="text" class="form-control" id="user-name" name="name" placeholder="Enter user name">
+                    <small id="emailHelp" class="form-text text-muted">Enter user name</small>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Password</label>
+                    <input type="password" class="form-control" name="pass" id="exampleInputPassword1" placeholder="Password">
+                </div>
+
+                <button type="submit" class="btn btn-primary">Signin</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
 </body>
 </html>
